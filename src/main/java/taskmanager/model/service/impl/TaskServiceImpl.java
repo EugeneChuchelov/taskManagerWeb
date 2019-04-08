@@ -6,6 +6,8 @@ import taskmanager.model.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class TaskServiceImpl implements TaskService {
     @Autowired
@@ -13,6 +15,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Iterable<Task> findByTitle(String title) {
         return taskRepository.findByTitle(title);
+    }
+
+    @Override
+    public Iterable<Task> findByDate(Date date) {
+        return taskRepository.findByDate(date);
     }
 
     @Override
@@ -28,5 +35,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void remove(Task task) {
         taskRepository.delete(task);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        taskRepository.deleteById(id);
     }
 }

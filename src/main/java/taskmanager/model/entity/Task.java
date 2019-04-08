@@ -12,7 +12,7 @@ public class Task {
     private String title;
     @Column(name = "description", length = 256)
     private String description;
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.TIME)
     @Column(name = "date")
     private Date date;
     @Column(name = "contacts", length = 64)

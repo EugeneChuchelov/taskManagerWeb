@@ -1,48 +1,56 @@
 package taskmanager.controller;
 
 
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.*;
 import taskmanager.model.entity.Task;
 import taskmanager.model.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
-@Controller
-@RequestMapping(path = "/test")
+@Api
+@RestController
 public class MainController {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping(path = "/add")
+    @PostMapping(path = "/add")
     public @ResponseBody
-    String addNewTask(@RequestParam String title, @RequestParam String description,
-                      @RequestParam String date, @RequestParam String contacts) {
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Task task = null;
-        try {
-            task = new Task(title, description, ft.parse(date), contacts);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    void addNewTask(@RequestBody Task task) {
         taskService.save(task);
-        return "Saved";
     }
 
-    @GetMapping(path = "/all")
+    @DeleteMapping(path = "/delete")
+    void deleteTask(@RequestParam int id){
+        taskService.deleteById(id);
+    }
+
+    @GetMapping(path = "/find/all")
     public @ResponseBody
     Iterable<Task> getAllTasks() {
         return taskService.findAll();
     }
 
-    @GetMapping(path = "/find")
+    @GetMapping(path = "/find/title")
     public @ResponseBody
     Iterable<Task> getByName(@RequestParam String title){
         return taskService.findByTitle(title);
+    }
+
+    @GetMapping(path = "/find/date")
+    public @ResponseBody
+    Iterable<Task> getByDate(@RequestParam String date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-DD HH:mm");
+        Date parsedDate = null;
+        try {
+            parsedDate = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            System.err.println("Wrong date format");
+            parsedDate = new Date();
+        }
+        return taskService.findByDate(parsedDate);
     }
 }
