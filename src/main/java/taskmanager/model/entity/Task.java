@@ -1,5 +1,7 @@
 package taskmanager.model.entity;
 
+import taskmanager.alarm.TaskStatus;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,11 +14,12 @@ public class Task {
     private String title;
     @Column(name = "description", length = 256)
     private String description;
-    //@Temporal(TemporalType.TIME)
     @Column(name = "date")
     private Date date;
     @Column(name = "contacts", length = 64)
     private String contacts;
+    @Column(name = "status")
+    private TaskStatus status;
 
     public Task() {
     }
@@ -66,5 +69,13 @@ public class Task {
 
     public void setContacts(String contacts) {
         this.contacts = contacts;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
 }
